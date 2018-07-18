@@ -44,7 +44,7 @@ public class Parallel {
         int[][] d = new int[n][n];
         for(int i =0 ; i < n ; i ++){
             for(int j = 0; j< n ; j ++){
-                d[i][j] = randnum.nextInt(9);
+                d[i][j] = randnum.nextInt(4);
             }
         }
 
@@ -72,7 +72,7 @@ public class Parallel {
     public  static Parallel calc_parallel(Parallel arr1,Parallel arr2){
         //スレッドの数(固定)のときnewFixedThreadPool
         //効率的に自動設定する時newWorkStealingPool
-        final int MAX_THREADS = 1000;
+        final int MAX_THREADS = 2000;
             int[][] d = new int[arr1.getIntRow()][arr2.getIntCol()];
             Parallel pl = new Parallel(d);
                 ExecutorService es = Executors.newFixedThreadPool(MAX_THREADS);
