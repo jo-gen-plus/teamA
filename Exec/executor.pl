@@ -15,7 +15,7 @@ $tab = '   ';
 
 ###  実行するプログラム一覧  ###
 my $programs = [
-    ['Go', '../go/matrix/matrix_muler'],
+    ['Go', '../go/matrix_muler'],
 #    ['Java', 'java -jar ../java/matrix_muler.jar'],
 #    ['C-OpenMP', '../c/matrix_muler'],
 #    ['Python-multiprocessing', 'python3 ../python_multiprocessing/matrix_muler'],
