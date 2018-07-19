@@ -1,53 +1,70 @@
-from multiprocessing import Process, cpu_count,current_process, Array
+from multiprocessing import Process, cpu_count,current_process, Array,Pool
+import time
+import random
+
+#r1=random.randrange(2000)#2000までのN
+
+t_arr1=[[2,55,3,0],[11,7,43,6],[0,8,47,1]]
+t_arr2=[[23, 2, 4, 23, 12],[3, 53, 39, 8, 10],[37, 39, 4, 9, 98],[3, 9, 7, 23, 87]]
+
+def make_sqrMatrix(n):
+	a = [[0 for i in range(n)]for j in range(n)]
+
+	for i in range(n):
+		for j in range(n):
+			a[i][j] = random.randint(100)
+
+	return a
 
 
-size=10
+def calc_serial(arr1,arr2):
+    ar=len(arr1)
+    ac=len(arr1[0])
+    br=len(arr2)
+    bc=len(arr2[0])
+    if ac != br:
+        print("計算不可能な行列です。")
+    c =[[0 for i in range(ar)]for j in range(bc)]
 
-#A = [[i+j*size for i in range(size)] for j in range(size)]
-A=[[3,0,0,3,3,5,2,2,4], [1,2,0,3,6,2,1,5,2],[1,4,7,2,5,3,3,6,5],[3,5,2,5,2,5,3,6,3],[4,6,2,5,2,5,7,3,4],[6,2,6,4,2,5,6,2,6],[2,5,2,5,3,5,6,4,5],[4,2,4,5,2,5,3,4,5],[3,5,3,6,4,5,3,1,2]]
+    for i in range(ar):
+        for j in range(bc):
+            for k in range(ac):
+                print(c)
+                c[i][j] = arr1[i][k] * arr2[k][j]
+    return c
 
-#B = [[1 for i in range(size)] for j in range(size)]
-B=[[3,0,0,3,3,5,2,2,4],[1,2,0,3,6,2,1,5,2],[1,4,7,2,5,3,3,6,5],[3,5,2,5,2,5,3,6,3],[4,6,2,5,2,5,7,3,4],[6,2,6,4,2,5,6,2,6],[2,5,2,5,3,5,6,4,5],[4,2,4,5,2,5,3,4,5],[3,5,3,6,4,5,3,1,2]]
 
-C = [0 for j in range(size*size)]
+def calc_parallel(arr1,arr2):
+    p = Pool(4)
+    p.map(calc_serial,arr1,arr2)
+    p.close()
 
 
-sheardC = Array('f',C)
+def calc_PPart(i, a, b, c, ch, chan):
+	#  １スレッドが行う計算  */
+	# 今回は、「i 行目の計算」
+	ac = len(a[0])
+	bc = len(b[0])
+	for j in range(bc):
+		part = 0
+		for k in range(ac):
+			part += a[i][k] * b[k][j]
+		c[i][j] = part
 
-number_of_cpus = cpu_count()
+	ch <- 1
 
-def calc_mat(mat1,mat2,sheardmat):
 
-    cpuindex = int(current_process().name.split("-")[1])
-    ### 実行されているプロセスを取得(ex:current_process()はProcess-1と出力するので、1だけを抽出する)
+if __name__ == '__main__':
 
-    row = len(mat1)/number_of_cpus
-    ### この場合、行をcpu数で割ることで、各プロセスが担当するデータを定義する。
+    start = time.time()
+    calc_serial(t_arr1,t_arr2)
+    calc_parallel(t_arr1,t_arr2)#並列計算
+    process_time = time.time() - start
+    print('計算時間'.format(process_time))#経過時間
 
-    start = int(row*(cpuindex-1))
-    end = int(row*cpuindex)
 
-    ### 10x10の行列の計算に、12processを使用した場合、process-1が1,2行目を担当する。
+#テスト用A=[[3,0,0,3,3,5,2,2,4], [1,2,0,3,6,2,1,5,2],[1,4,7,2,5,3,3,6,5],[3,5,2,5,2,5,3,6,3],[4,6,2,5,2,5,7,3,4],[6,2,6,4,2,5,6,2,6],[2,5,2,5,3,5,6,4,5],[4,2,4,5,2,5,3,4,5],[3,5,3,6,4,5,3,1,2]]
 
-    for i in range(start,end):
-        for j in range(size):
-            for k in range(size):
-                sheardmat[i*size+j] += mat1[i][k]*mat2[k][j]
+#テスト用B=[[3,0,0,3,3,5,2,2,4],[1,2,0,3,6,2,1,5,2],[1,4,7,2,5,3,3,6,5],[3,5,2,5,2,5,3,6,3],[4,6,2,5,2,5,7,3,4],[6,2,6,4,2,5,6,2,6],[2,5,2,5,3,5,6,4,5],[4,2,4,5,2,5,3,4,5],[3,5,3,6,4,5,3,1,2]]
 
-calc_list = []
 
-for i in range(number_of_cpus):
-    calc = Process(target=calc_mat,args=(A,B,sheardC))
-    ## Process(target=関数、args=関数の引数)
-    calc.start()
-    calc_list.append(calc)
-
-[icalc.join() for icalc in calc_list]
-
-for i,data in enumerate(sheardC.get_obj()):
-
-    print("%6.1lf" % (data),end='')
-
-    if (i+1)%size==0:
-
-        print()
