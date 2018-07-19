@@ -6,7 +6,11 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"time"
 )
+
+//
+var intRange = 100
 
 /**  テスト用の行列  */
 var t_arr1 = [][]int{ // 3*4
@@ -27,7 +31,7 @@ func make_sqrMatrix(n int) [][]int {
 	for i := 0; i < n; i++ {
 		a[i] = make([]int, n)
 		for j := 0; j < n; j++ {
-			a[i][j] = rand.Intn(100)
+			a[i][j] = rand.Intn(intRange)
 		}
 	}
 	return a
@@ -75,6 +79,7 @@ func calc_parallel(arr1, arr2 [][]int) [][]int {
 	ch := make(chan int)
 	// それぞれの行を並列処理させる
 	for i := 0; i < ar; i++ {
+		// 並列化して実行。
 		go calc_PPart(i, arr1, arr2, result, ch)
 	}
 	// 終わるまで待つ
@@ -124,11 +129,20 @@ func main() {
 		arr2 = make_sqrMatrix(n)
 	}
 	//計算結果
-	var result [][]int
+	//var result [][]int
+	//fmt.Println("===Start===")
+	bf_t := time.Now()
+	//fmt.Println(bf_t)
 	if k == 0 {
-		result = calc_serial(arr1, arr2)
+		//result =
+		calc_serial(arr1, arr2)
 	} else {
-		result = calc_parallel(arr1, arr2)
+		//result =
+		calc_parallel(arr1, arr2)
 	}
-	fmt.Println(result)
+	af_t := time.Now()
+	fmt.Println(af_t.Sub(bf_t).Seconds())
+	//fmt.Println(strconv.FormatInt(af_t.Sub(bf_t).Nanoseconds(), 10))
+
+	//fmt.Println(result)
 }
