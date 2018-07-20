@@ -13,7 +13,6 @@ def make_sqrMatrix(n):
 	for i in range(n):
 		for j in range(n):
 			a[i][j] = random.randint(100)
-
 	return a
 
 
@@ -22,9 +21,12 @@ def calc_serial(arr1,arr2):
     ac=len(arr1[0])
     br=len(arr2)
     bc=len(arr2[0])
+
     if ac != br:
         print("計算不可能な行列です。")
-    c =[[0 for i in range(ar)]for j in range(bc)]
+        return
+
+    c =[[0 for j in range(bc)]for j in range(ar)]
 
     for i in range(ar):
         for j in range(bc):
@@ -35,31 +37,40 @@ def calc_serial(arr1,arr2):
 
 
 def calc_parallel(arr1,arr2):
+
+    ar = len(arr1)
     p = Pool(4)
-    p.map(calc_serial,arr1,arr2)
+    p.map(calc_PPart,range(ar))
+
     p.close()
 
 
-def calc_PPart(i, a, b, c, ch, chan):
-	#  １スレッドが行う計算  */
-	# 今回は、「i 行目の計算」
+def calc_PPart(i,a,b,c):
+
 	ac = len(a[0])
 	bc = len(b[0])
+
+    c = [0 for i in range(bc)]
+
 	for j in range(bc):
 		part = 0
 		for k in range(ac):
 			part += a[i][k] * b[k][j]
-		c[i][j] = part
-
-	ch <- 1
+		c[i] = part
+    return c
 
 
 if __name__ == '__main__':
-
+    args = sys.argv
     start = time.time()
     calc_serial(t_arr1,t_arr2)
     calc_parallel(t_arr1,t_arr2)#並列計算
     process_time = time.time() - start
+
+
+
+
+
     print('計算時間'.format(process_time))#経過時間
 
 
