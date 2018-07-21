@@ -8,7 +8,7 @@ use Time::Piece;
 
 
 ## 正方行列の１辺の大きさ。1000を推奨
-$n = 10;
+$n = 20;
 
 # 実行時に表示する文字のタブ
 $tab = '   ';
@@ -17,10 +17,10 @@ $tab = '   ';
 my $programs = [
     ['Go', '../go/matrix_muler'],
 #    ['Java', 'java -jar ../java/matrix_muler.jar'],
-#    ['C-OpenMP', '../c/matrix_muler'],
-#    ['Python-multiprocessing', 'python3 ../python_multiprocessing/matrix_muler'],
-#    ['Python-joblib', 'python3 ../python_joblib/matrix_muler'],
-#    ['Python-dask', 'python3 ../python_dask/matrix_muler']
+    ['C-OpenMP', '../c_OpenMP/matrix_muler'],
+    ['Python-multiprocessing', 'python3 ../python_multiprocessing/para_calc.py'],
+    ['Python-joblib', 'python3 ../python_joblib/matrix_muler.py'],
+    ['Python-dask', 'python3 ../python_dask/matrix_muler.py']
 ];
 
 
@@ -37,14 +37,14 @@ print $now_t;
 mkdir "$now_t", 0777 or die $!;
 
 for (my $p = 0; $p < @$programs; $p++) {
-    print "\n=====  $programs->[$p][0] 版 の実験を開始します。  =====\n";
+    print "\n=====  $programs->[$p][0] 版 を開始します。  =====\n";
     ## 結果を出力・保存するファイル
     $outputFile="$now_t".'/results_'."$programs->[$p][0]".'.csv';
     #print $outputFile;
     open(FILE, ">>$outputFile") or die "$!";  # ファルハンドル。追加書き込み
     
     ### 並列度毎 ###
-    for (my $i = 0; $i < 2; $i++) {
+    for (my $i = 0; $i < 3; $i++) {
         print "＜並列度： $i ＞\n";
         # 実行するコマンドを作る
         $cmd = $programs->[$p][1]." $n $i";
@@ -63,7 +63,8 @@ for (my $p = 0; $p < @$programs; $p++) {
         print $tab."Average Time：\n";
         print "$tab$tab$average_time s\n\n";
         
-        printf FILE "%f\n", $average_time;
+        # ファイルに出力
+        printf FILE "%d,%f\n", $i, $average_time;
     }
     
     close (FILE);
@@ -75,4 +76,4 @@ for (my $p = 0; $p < @$programs; $p++) {
 
 
 # execute echo in back-quote
-print "\nExperimentation compleated !\n\n";
+print "\nExperimentation compleated !!\n\n";

@@ -14,9 +14,13 @@ double gettimeofday_sec()
 
 
 
-//gcc-6 -fopenmp OMP-new.c でコンパイル
-//./a.out 800 1 並列で実行する
-// 左は行列のnの大きさ(n*nの行列なので) 右は並列か直列かどうか0なら直列で他の数字なら並列で実行する（並列度の指定とかは俺は出来なかった、本当はできるかもしれない)
+//gcc-6 -fopenmp OpenMP-final.c でコンパイル
+/**
+ * ./a.out 800 1 並列で実行する
+ * １つ目は行列のnの大きさ(n*nの行列なので) 
+ * ２つ目は並列度。0なら直列で他の数字なら並列で実行する
+ * （並列度の指定とかは俺は出来なかった、本当はできるかもしれない)
+ */
 
 
 int i, j, k;
@@ -39,7 +43,6 @@ int t_arr2[4][5] =
 int** make_sqrMatrix(int n)
 {
     int** a = malloc(sizeof(int *) * n);
-    
     
     for (int i = 0; i < n; i++)
     {
@@ -88,7 +91,6 @@ int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
         }
     }
 
-    
     return c;
 }
 
@@ -102,23 +104,21 @@ int** calc_parallel(int** arr1,int** arr2,int ar,int ac,int bc)
         c[i] = malloc(sizeof(int) * bc);
     }
     
-    
+    // 並列化 して計算
     #pragma omp parallel for private (j, k)
     for (int i = 0; i < ar; i++)
     {
         for (int j = 0; j < bc; j++)
         {
-            c[i][j] = 0;
+            //c[i][j] = 0;
             
             for (int k = 0; k < ac; k++)
             {
                 c[i][j] += arr1[i][k] * arr2[k][j];
                 
-                
             }
         }
     }
-    
     
     return c;
 }
@@ -170,26 +170,23 @@ int main(int argc, char *argv[])
     }
     else
     {
+        arr1 = make_sqrMatrix(n);
+        arr2 = make_sqrMatrix(n);
         ar = n;
         ac = n;
         bc = n;
-        arr1 = make_sqrMatrix(n);
-        arr2 = make_sqrMatrix(n);
     }
     
+    t1 = gettimeofday_sec();
     if (k == 0)
     {
-        t1 = gettimeofday_sec();
         result = calc_serial(arr1, arr2, ar, ac, bc);
-        t2 = gettimeofday_sec();
-        printf("%f\n", t2 - t1);
     }
     else
     {
-        t1 = gettimeofday_sec();
         result = calc_parallel(arr1, arr2, ar, ac, bc);
-        t2 = gettimeofday_sec();
-        printf("%f\n", t2 - t1);
     }
+    t2 = gettimeofday_sec();
+    printf("%f\n", t2 - t1);
     return 0;
 }

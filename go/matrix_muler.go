@@ -45,9 +45,7 @@ func calc_serial(arr1, arr2 [][]int) [][]int {
 	ac := len(arr1[0])
 	br := len(arr2)
 	bc := len(arr2[0])
-	if ac != br {
-		panic("wrong [][]int type")
-	}
+
 	c := make([][]int, ar)
 	for i := 0; i < ar; i++ {
 		c[i] = make([]int, bc)
@@ -67,9 +65,7 @@ func calc_parallel(arr1, arr2 [][]int) [][]int {
 	ac := len(arr1[0])
 	br := len(arr2)
 	bc := len(arr2[0])
-	if ac != br {
-		panic("計算不可能な行列です。")
-	}
+
 	result := make([][]int, ar)
 	for i := 0; i < ar; i++ {
 		result[i] = make([]int, bc)
@@ -103,6 +99,18 @@ func calc_PPart(i int, a, b, c [][]int, ch chan int) {
 	ch <- 1
 }
 
+// 行列の掛け算が計算可能かを調べる
+func isCalculableMatrix(arr1, arr2 [][]int) bool {
+	// 計算可能かを確認
+	ac := len(arr1[0])
+	br := len(arr2)
+	if ac != br {
+		fmt.Println("計算不可能な行列です。")
+		return false
+	}
+	return true
+}
+
 /**
 【引数】
 	Args[1] :
@@ -128,11 +136,16 @@ func main() {
 		arr1 = make_sqrMatrix(n)
 		arr2 = make_sqrMatrix(n)
 	}
+
+	// 計算可能かを確認
+	if !isCalculableMatrix(arr1, arr2) {
+		return
+	}
+
 	//計算結果
 	//var result [][]int
 	//fmt.Println("===Start===")
 	bf_t := time.Now()
-	//fmt.Println(bf_t)
 	if k == 0 {
 		//result =
 		calc_serial(arr1, arr2)
