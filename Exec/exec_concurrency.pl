@@ -8,19 +8,19 @@ use Time::Piece;
 
 
 ## 正方行列の１辺の大きさ。1000を推奨
-$n = 20;
+$n = 10;
 
 # 実行時に表示する文字のタブ
 $tab = '   ';
 
 ###  実行するプログラム一覧  ###
 my $programs = [
-    ['Go', '../go/matrix_muler'],
+    ['[Go]', '../go/matrix_muler'],
 #    ['Java', 'java -jar ../java/matrix_muler.jar'],
-    ['C-OpenMP', '../c_OpenMP/matrix_muler'],
-    ['Python-multiprocessing', 'python3 ../python_multiprocessing/para_calc.py'],
-    ['Python-joblib', 'python3 ../python_joblib/matrix_muler.py'],
-    ['Python-dask', 'python3 ../python_dask/matrix_muler.py']
+    ['[C] OpenMP', '../c_OpenMP/matrix_muler'],
+    ['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
+    ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
+    ['[Python] dask', 'python3 ../python_dask/matrix_muler.py']
 ];
 
 
@@ -39,9 +39,11 @@ mkdir "$now_t", 0777 or die $!;
 for (my $p = 0; $p < @$programs; $p++) {
     print "\n=====  $programs->[$p][0] 版 を開始します。  =====\n";
     ## 結果を出力・保存するファイル
-    $outputFile="$now_t".'/results_'."$programs->[$p][0]".'.csv';
+    $outputFile="$now_t".'/results-'."$programs->[$p][0]".'.csv';
     #print $outputFile;
     open(FILE, ">>$outputFile") or die "$!";  # ファルハンドル。追加書き込み
+    # ファイルに列名を追加
+    printf FILE ",%s\n", $programs->[$p][0];
     
     ### 並列度毎 ###
     for (my $i = 0; $i < 3; $i++) {

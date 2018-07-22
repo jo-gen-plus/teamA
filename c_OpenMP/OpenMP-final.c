@@ -63,8 +63,8 @@ int** make_sqrMatrix(int n)
     return a;
 }
 
-/*  直列に計算  */
 
+/*  直列に計算  */
 int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
 {
 
@@ -95,7 +95,7 @@ int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
 }
 
 /*  並列に計算  */
-int** calc_parallel(int** arr1,int** arr2,int ar,int ac,int bc)
+int** calc_parallel(int** arr1,int** arr2,int k,int ar,int ac,int bc)
 {
     int** c = malloc(sizeof(int *) * ar);
     
@@ -105,6 +105,10 @@ int** calc_parallel(int** arr1,int** arr2,int ar,int ac,int bc)
     }
     
     // 並列化 して計算
+    // http://tech.ckme.co.jp/openmp.shtml
+    #ifdef _OPENMP
+    omp_set_num_threads(k);
+    #endif
     #pragma omp parallel for private (j, k)
     for (int i = 0; i < ar; i++)
     {
@@ -184,7 +188,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        result = calc_parallel(arr1, arr2, ar, ac, bc);
+        result = calc_parallel(arr1, arr2, k, ar, ac, bc);
     }
     t2 = gettimeofday_sec();
     printf("%f\n", t2 - t1);
