@@ -79,31 +79,18 @@ public class Main {
             //あるかないかのチェック
             if (args[i] == "") {
                 row[i] = 0;
-            } else if(Main.checkNum(args) == 0) {
-                row[i] = 0;
-            }else if (Main.checkNum(args) == 1){
-                row[i] = Integer.parseInt(args[i]);
+            } else {
+                //数字かどうかのチェック
+                try {
+                    Integer.parseInt(args[1]);
+                    row[i] = Integer.parseInt(args[i]);
+                } catch (NumberFormatException e) {
+                    row[i] = 0;
+                }
             }
         }
         return row;
     }
 
-    public static int checkNum(String[] args) {
-        int row[] = new int[args.length];
-        for (int i = 0; i < args.length; i++) {
-            //数字かどうかのチェック
-            try {
-                Integer.parseInt(args[1]);
 
-                return 1;
-            } catch (NumberFormatException e) {
-                row[i] = 0;
-                return 0;
-            }
-
-
-        }
-        return 0;
-
-    }
 }
