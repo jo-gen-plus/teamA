@@ -13,7 +13,7 @@ public class Main {
         // newFixedThreadPool を　newWorkStealingPool　に変更
         //Calculator内のmake_sqrMatrixの中のrandnum.nextInt()で行列内の値のランダム幅を変更できる，現在は4(0~4)
         int n = 500;
-        args = new String[]{"20","5"};
+
         int[] args_num = {0,0,0};
 
         try {
