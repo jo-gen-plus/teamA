@@ -13,6 +13,7 @@ public class Main {
         // newFixedThreadPool を　newWorkStealingPool　に変更
         //Calculator内のmake_sqrMatrixの中のrandnum.nextInt()で行列内の値のランダム幅を変更できる，現在は4(0~4)
         int n = 500;
+        args = new String[]{"20","5"};
         int[] args_num = {0,0,0};
 
         try {
@@ -33,10 +34,10 @@ public class Main {
         Matrix ans1 = new Matrix(d);
         Matrix ans2 = new Matrix(d);
 
+
         long start = System.currentTimeMillis();
 
         Calculator calc = new Calculator();
-
 
 
         //System.out.println(Matrix.calc_serial(t_arr1bk, t_arr2bk));
@@ -44,6 +45,8 @@ public class Main {
         long end = System.currentTimeMillis();
 
 
+
+        //System.out.println(calc.calc_parallel(t_arr1a,t_arr2a,args_num[1]));
 
         long start2 = System.currentTimeMillis();
 
@@ -60,7 +63,7 @@ public class Main {
         System.out.println("逐次" + (end - start)  + "ms");
         System.out.println("並列" + (end2 - start2)  + "ms");
 
-
+        Thread.sleep(1_000L);
     }
     //n行n列のランダム行列を作成
     public static int[][] make_sqrMatrix(int n){
