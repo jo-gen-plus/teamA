@@ -13,14 +13,16 @@ public class Main {
         // newFixedThreadPool を　newWorkStealingPool　に変更
         //Calculator内のmake_sqrMatrixの中のrandnum.nextInt()で行列内の値のランダム幅を変更できる，現在は4(0~4)
         int n = 500;
-        try {
-            int args_num[] = checkAndConvert(args);
-            n = args_num[1];
-        } catch (ArrayIndexOutOfBoundsException e) {
-
-        }
         int[] args_num = {0,0,0};
 
+        try {
+            args_num = checkAndConvert(args);
+            n = args_num[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            args_num[0] = 0;
+            n = args_num[0];
+        }
+        System.out.println(args_num[0]);
 
 
         Matrix t_arr1a = new Matrix(make_sqrMatrix(n));
@@ -46,7 +48,7 @@ public class Main {
         long start2 = System.currentTimeMillis();
 
         //https://qiita.com/koduki/items/086d42b5a3c74ed8b59e#executor-framework
-        ans2 = calc.calc_parallel(t_arr1a,t_arr2a,args_num[2]);
+        ans2 = calc.calc_parallel(t_arr1a,t_arr2a,args_num[1]);
         long end2 = System.currentTimeMillis();
         System.out.println(ans1);
         System.out.println(ans2);
