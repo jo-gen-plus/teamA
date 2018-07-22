@@ -24,7 +24,7 @@ public class Calculator {
 
     }
     //並列処理（全体）
-    public   Matrix calc_parallel(Matrix arr1,Matrix arr2){
+    public   Matrix calc_parallel(Matrix arr1,Matrix arr2,int ParallelDigree){
         //スレッドの数(固定)のときnewFixedThreadPool
         //効率的に自動設定する時newWorkStealingPool
         final int MAX_THREADS = 500;

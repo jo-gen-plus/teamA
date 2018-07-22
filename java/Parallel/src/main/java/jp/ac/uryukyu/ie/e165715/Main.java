@@ -3,15 +3,25 @@ package jp.ac.uryukyu.ie.e165715;
 import java.util.Random;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    static final int randNumber = 4 ;
+
+    public static void main(String[] args ) throws InterruptedException {
 
         //n : 行数かつ列数。
         //スレッド数はParallelのcalc_parallel内のMAX_THREADSで変更可能
         //スレッド数を自動的に決定する場合はMAX_THREADSをコメントアウトし
         // newFixedThreadPool を　newWorkStealingPool　に変更
         //Calculator内のmake_sqrMatrixの中のrandnum.nextInt()で行列内の値のランダム幅を変更できる，現在は4(0~4)
-
         int n = 500;
+        try {
+            int args_num[] = checkAndConvert(args);
+            n = args_num[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+        }
+        int[] args_num = {0,0,0};
+
+
 
         Matrix t_arr1a = new Matrix(make_sqrMatrix(n));
         Matrix t_arr2a = new Matrix(make_sqrMatrix(n));
@@ -36,7 +46,7 @@ public class Main {
         long start2 = System.currentTimeMillis();
 
         //https://qiita.com/koduki/items/086d42b5a3c74ed8b59e#executor-framework
-        ans2 = calc.calc_parallel(t_arr1a,t_arr2a);
+        ans2 = calc.calc_parallel(t_arr1a,t_arr2a,args_num[2]);
         long end2 = System.currentTimeMillis();
         System.out.println(ans1);
         System.out.println(ans2);
@@ -56,11 +66,44 @@ public class Main {
         int[][] d = new int[n][n];
         for(int i =0 ; i < n ; i ++){
             for(int j = 0; j< n ; j ++){
-                d[i][j] = randnum.nextInt(4);
+                d[i][j] = randnum.nextInt(randNumber);
             }
         }
 
         return d;
+
+    }
+    public static int[] checkAndConvert(String[] args){
+        int row[] = new int[args.length];
+        for(int i = 0 ;i < args.length ;i++) {
+            //あるかないかのチェック
+            if (args[i] == "") {
+                row[i] = 0;
+            } else if(Main.checkNum(args) == 0) {
+                row[i] = 0;
+            }else if (Main.checkNum(args) == 1){
+                row[i] = Integer.parseInt(args[i]);
+            }
+        }
+        return row;
+    }
+
+    public static int checkNum(String[] args) {
+        int row[] = new int[args.length];
+        for (int i = 0; i < args.length; i++) {
+            //数字かどうかのチェック
+            try {
+                Integer.parseInt(args[1]);
+
+                return 1;
+            } catch (NumberFormatException e) {
+                row[i] = 0;
+                return 0;
+            }
+
+
+        }
+        return 0;
 
     }
 }
