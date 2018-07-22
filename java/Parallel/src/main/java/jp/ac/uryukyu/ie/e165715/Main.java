@@ -22,7 +22,7 @@ public class Main {
             args_num[0] = 0;
             n = args_num[0];
         }
-        System.out.println(args_num[0]);
+        System.out.println();
 
 
         Matrix t_arr1a = new Matrix(make_sqrMatrix(n));

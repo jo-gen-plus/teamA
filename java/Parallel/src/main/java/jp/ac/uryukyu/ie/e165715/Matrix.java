@@ -33,6 +33,7 @@ public class Matrix {
 
     public int getIntValue(int row, int col){
         return this.intmatrix[row][col];
+
     }
 
 

@@ -27,7 +27,7 @@ public class Calculator {
     public   Matrix calc_parallel(Matrix arr1,Matrix arr2,int ParallelDigree){
         //スレッドの数(固定)のときnewFixedThreadPool
         //効率的に自動設定する時newWorkStealingPool
-        final int MAX_THREADS = 500;
+        final int MAX_THREADS = ParallelDigree;
         int[][] d = new int[arr1.getIntRow()][arr2.getIntCol()];
         ExecutorService es = Executors.newFixedThreadPool(MAX_THREADS);
         try {
