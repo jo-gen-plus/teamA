@@ -8,7 +8,8 @@ use Time::Piece;
 
 
 ## 正方行列の１辺の大きさ。1000を推奨
-$n = 10;
+$n = 300;
+$concurrency_range = 4;
 
 # 実行時に表示する文字のタブ
 $tab = '   ';
@@ -16,8 +17,9 @@ $tab = '   ';
 ###  実行するプログラム一覧  ###
 my $programs = [
     ['[Go]', '../go/matrix_muler'],
-#    ['Java', 'java -jar ../java/matrix_muler.jar'],
+    ['[Java]', 'java -jar ../java/matrix_muler.jar'],
     ['[C] OpenMP', '../c_OpenMP/matrix_muler'],
+    # マルチプロセス と マルチスレッドを選べる。
     ['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
     ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
     ['[Python] dask', 'python3 ../python_dask/matrix_muler.py']
@@ -46,7 +48,7 @@ for (my $p = 0; $p < @$programs; $p++) {
     printf FILE ",%s\n", $programs->[$p][0];
     
     ### 並列度毎 ###
-    for (my $i = 0; $i < 3; $i++) {
+    for (my $i = 0; $i < $concurrency_range; $i++) {
         print "＜並列度： $i ＞\n";
         # 実行するコマンドを作る
         $cmd = $programs->[$p][1]." $n $i";
@@ -67,6 +69,7 @@ for (my $p = 0; $p < @$programs; $p++) {
         
         # ファイルに出力
         printf FILE "%d,%f\n", $i, $average_time;
+        sleep(1);
     }
     
     close (FILE);
@@ -78,4 +81,4 @@ for (my $p = 0; $p < @$programs; $p++) {
 
 
 # execute echo in back-quote
-print "\nExperimentation compleated !!\n\n";
+#print "\nExperimentation compleated !!\n\n";

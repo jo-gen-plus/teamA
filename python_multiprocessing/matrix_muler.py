@@ -5,8 +5,8 @@ import sys
 
 
 ##  テスト用行列  ###
-t_arr1=[[1,1,1,1],[1,1,1,1],[1,1,1,1]]
-t_arr2=[[3, 3, 3, 3, 3],[3, 3, 3, 3, 3],[3, 3, 3, 3, 3],[3, 3, 3, 3, 3]]
+t_arr1 = [[2, 55, 3, 0],[11, 7, 43, 6],[0, 8, 47, 1]]
+t_arr2 = [[23, 2, 4, 23, 12],[3, 53, 39, 8, 10],[37, 39, 4, 9, 98],[3, 9, 7, 23, 87]]
 
 ###  実験用の n*n正方行列 を作成  ###
 def make_sqrMatrix(n):
@@ -14,7 +14,7 @@ def make_sqrMatrix(n):
 
 	for i in range(n):
 		for j in range(n):
-			a[i][j] = random.randint(0,100)
+			a[i][j] = random.randint(-100,100)
 	return a
 
 
@@ -26,12 +26,13 @@ def calc_serial(arr1,arr2):
     br=len(arr2)
     bc=len(arr2[0])
 
-    c =[[0 for j in range(bc)]for j in range(ar)]
+    c =[[0 for j in range(bc)] for j in range(ar)]
 
     for i in range(ar):
         for j in range(bc):
             for k in range(ac):
-                c[i][j] = arr1[i][k] * arr2[k][j]
+                c[i][j] += arr1[i][k] * arr2[k][j]
+    
     return c
 
 
@@ -95,8 +96,8 @@ if __name__ == '__main__':
     if not isCalculableMatrix(arr1, arr2):
         sys.exit()
     
+    #result = 0
     start = time.time()
-    #result = [[]]
     if k == 0:
         result = calc_serial(arr1, arr2)
     else:

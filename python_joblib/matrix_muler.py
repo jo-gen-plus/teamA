@@ -49,7 +49,10 @@ def calc_parallel(arr1, arr2,k):
     bc = len(arr2[0])
     
     ## 並列化して計算
-    return Parallel(n_jobs=k)( [delayed(calc_PPart)(i, arr1, arr2, ac, bc) for i in range(ar)] )
+    # マルチ プロセスで
+    #return Parallel(n_jobs=k)( [delayed(calc_PPart)(i, arr1, arr2, ac, bc) for i in range(ar)] )
+    # マルチ スレッドで
+    return Parallel(n_jobs=k, backend="threading")( [delayed(calc_PPart)(i, arr1, arr2, ac, bc) for i in range(ar)] )
 
 
 ###  スレッドに食わせる処理１つ分  ###
@@ -98,8 +101,8 @@ if __name__ == '__main__':
     if not isCalculableMatrix(arr1, arr2):
         sys.exit()
 
-    start = time()
     #result = [[]]
+    start = time()
     if k == 0:
          result = calc_serial(arr1, arr2)
     else:
