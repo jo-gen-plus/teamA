@@ -30,8 +30,10 @@ public class Calculator {
         final int MAX_THREADS = ParallelDigree;
         int[][] d = new int[arr1.getIntRow()][arr2.getIntCol()];
         ExecutorService es = Executors.newFixedThreadPool(MAX_THREADS);
+
         try {
-            for (int r = 0 ; r < MAX_THREADS; r ++) {
+            for (int r = 0; r < arr1.getIntRow(); r++) {
+
                 int finalR = r;
                 es.execute(() -> calc_PPart(arr1, arr2, finalR, d));
             }
@@ -45,16 +47,16 @@ public class Calculator {
 
     }
     //並列処理（個別）
-    public  void calc_PPart(Matrix arr1,Matrix arr2,int r,int[][] d){
+    public  void calc_PPart(Matrix arr1,Matrix arr2,int r,int[][] d) {
         //r行目の処理
-        for(int c=0; c<arr2.getIntCol(); c++){
-            int sum = 0;
-            for(int i=0; i<arr2.getIntRow(); i++){
-                sum += arr1.getIntValue(r, i) * arr2.getIntValue(i, c);
+
+            for (int c = 0; c < arr2.getIntCol(); c++) {
+                int sum = 0;
+                for (int i = 0; i < arr2.getIntRow(); i++) {
+                    sum += arr1.getIntValue(r, i) * arr2.getIntValue(i, c);
+                }
+                d[r][c] = sum;
             }
-            d[r][c] = sum;
-        }
 
     }
-
 }
