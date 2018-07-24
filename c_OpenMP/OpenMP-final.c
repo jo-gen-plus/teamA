@@ -121,7 +121,7 @@ int** calc_parallel(int** arr1,int** arr2,int k,int ar,int ac,int bc)
     #ifdef _OPENMP
     omp_set_num_threads(k);
     #endif
-    #pragma omp parallel for private (i)
+    #pragma omp parallel for
     for (int i = 0; i < ar; i++)
     {
         // 複数回実行する関数をここに書く。

@@ -8,7 +8,7 @@ use Time::Piece;
 
 
 ## 正方行列の１辺の大きさ。1000を推奨
-$n = 300;
+$n = 50;
 $concurrency_range = 4;
 
 # 実行時に表示する文字のタブ
@@ -16,13 +16,14 @@ $tab = '   ';
 
 ###  実行するプログラム一覧  ###
 my $programs = [
-    ['[Go]', '../go/matrix_muler'],
     ['[Java]', 'java -jar ../java/matrix_muler.jar'],
-    ['[C] OpenMP', '../c_OpenMP/matrix_muler'],
+#    ['[C] OpenMP', '../c_OpenMP/matrix_muler'],
     # マルチプロセス と マルチスレッドを選べる。
-    ['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
-    ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
-    ['[Python] dask', 'python3 ../python_dask/matrix_muler.py']
+    #['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
+#    ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
+#    ['[Python] dask', 'python3 ../python_dask/matrix_muler.py']
+#    ['[Python] dask-t_Pandas', 'python3 ../python_dask/test_pandas_and_dask.py']
+    #['[Go]', '../go/matrix_muler'],
 ];
 
 
@@ -35,11 +36,24 @@ my $programs = [
 ## 現在のの日付・時間を取得
 my $t = localtime;
 $now_t = $t->hms("_");
-print $now_t;
+#print $now_t;
 mkdir "$now_t", 0777 or die $!;
+
+
+print "\n\n実験を開始します！\n";
+sleep(2);
+print "3\n";
+sleep(1);
+print "2\n";
+sleep(1);
+print "1\n";
+sleep(1);
+print "・\n・\n・\n";
+
 
 for (my $p = 0; $p < @$programs; $p++) {
     print "\n=====  $programs->[$p][0] 版 を開始します。  =====\n";
+    sleep(4);
     ## 結果を出力・保存するファイル
     $outputFile="$now_t".'/results-'."$programs->[$p][0]".'.csv';
     #print $outputFile;
