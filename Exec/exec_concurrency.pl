@@ -9,7 +9,8 @@ use Time::Piece;
 
 ## 正方行列の１辺の大きさ。1000を推奨
 $n = 50;
-$concurrency_range = 4;
+## 並列度の範囲。実験は 8 まで行った。
+$concurrency_range = 8;
 
 # 実行時に表示する文字のタブ
 $tab = '   ';
@@ -19,11 +20,11 @@ my $programs = [
     ['[Java]', 'java -jar ../java/matrix_muler.jar'],
 #    ['[C] OpenMP', '../c_OpenMP/matrix_muler'],
     # マルチプロセス と マルチスレッドを選べる。
-    #['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
-#    ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
+    ['[Python] multiprocessing', 'python3 ../python_multiprocessing/matrix_muler.py'],
+    ['[Python] joblib', 'python3 ../python_joblib/matrix_muler.py'],
 #    ['[Python] dask', 'python3 ../python_dask/matrix_muler.py']
 #    ['[Python] dask-t_Pandas', 'python3 ../python_dask/test_pandas_and_dask.py']
-    #['[Go]', '../go/matrix_muler'],
+    ['[Go]', '../go/matrix_muler'],
 ];
 
 
@@ -53,7 +54,7 @@ print "・\n・\n・\n";
 
 for (my $p = 0; $p < @$programs; $p++) {
     print "\n=====  $programs->[$p][0] 版 を開始します。  =====\n";
-    sleep(4);
+    sleep(1);
     ## 結果を出力・保存するファイル
     $outputFile="$now_t".'/results-'."$programs->[$p][0]".'.csv';
     #print $outputFile;
