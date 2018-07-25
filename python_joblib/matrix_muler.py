@@ -1,3 +1,5 @@
+#165724B 喜納　滉大
+
 # -*- coding: utf-8 -*-
 # $ pip install joblib
 # または anaconda に切り替え
