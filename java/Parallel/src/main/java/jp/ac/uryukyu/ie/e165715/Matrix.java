@@ -31,8 +31,9 @@ public class Matrix {
         return this.intmatrix[0].length;
     }
 
-    public double getIntValue(int row, int col){
+    public int getIntValue(int row, int col){
         return this.intmatrix[row][col];
+
     }
 
 
