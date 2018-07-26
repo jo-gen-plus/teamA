@@ -2,7 +2,7 @@ package jp.ac.uryukyu.ie.e165715;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+//e165715　上原正基
 public class Calculator {
 
 

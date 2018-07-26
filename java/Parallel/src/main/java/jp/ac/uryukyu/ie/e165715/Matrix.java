@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+//e165715　上原正基
 public class Matrix {
     private int[][] intmatrix;
     public  Matrix(int[][] vector){
