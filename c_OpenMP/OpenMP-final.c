@@ -23,6 +23,10 @@ double gettimeofday_sec()
  */
 
 
+// 名前　永田友志　学籍番号　145733B
+
+
+
 int i, j, k;
 
 int t_arr1[3][4] =
@@ -63,8 +67,8 @@ int** make_sqrMatrix(int n)
     return a;
 }
 
-/*  直列に計算  */
 
+/*  直列に計算  */
 int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
 {
 
@@ -79,12 +83,11 @@ int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
     {
         for (int j = 0; j < bc; j++)
         {
-            c[i][j] = 0;
+            //c[i][j] = 0;
 
             for (int k = 0; k < ac; k++)
             {
                 c[i][j] += arr1[i][k] * arr2[k][j];
-                
                 
             }
 
@@ -94,8 +97,21 @@ int** calc_serial(int** arr1,int** arr2,int ar,int ac,int bc)
     return c;
 }
 
+/* 並列化したい処理１つ分 */
+void calc_PPart(int** arr1,int** arr2,int** c,int i,int ac,int bc) 
+{
+    for (int j = 0; j < bc; j++)
+    {
+        //c[i][j] = 0;
+        for (int k = 0; k < ac; k++)
+        {
+            c[i][j] += arr1[i][k] * arr2[k][j];
+        }
+    }
+}
+
 /*  並列に計算  */
-int** calc_parallel(int** arr1,int** arr2,int ar,int ac,int bc)
+int** calc_parallel(int** arr1,int** arr2,int k,int ar,int ac,int bc)
 {
     int** c = malloc(sizeof(int *) * ar);
     
@@ -105,22 +121,28 @@ int** calc_parallel(int** arr1,int** arr2,int ar,int ac,int bc)
     }
     
     // 並列化 して計算
-    #pragma omp parallel for private (j, k)
+    // http://tech.ckme.co.jp/openmp.shtml
+    #ifdef _OPENMP
+    omp_set_num_threads(k);
+    #endif
+    #pragma omp parallel for
     for (int i = 0; i < ar; i++)
     {
-        for (int j = 0; j < bc; j++)
-        {
-            //c[i][j] = 0;
-            
-            for (int k = 0; k < ac; k++)
-            {
-                c[i][j] += arr1[i][k] * arr2[k][j];
-                
-            }
-        }
+        // 複数回実行する関数をここに書く。
+        calc_PPart(arr1, arr2, c, i, ac, bc);
     }
     
     return c;
+}
+
+// デバッグ用に追加
+void print_result(int ar, int bc, int** result) {
+    for (int i=0; i<ar; i++) {
+        for (int j=0; j<bc; j++) {
+            printf("%d ", result[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 int main(int argc, char *argv[])
@@ -177,6 +199,7 @@ int main(int argc, char *argv[])
         bc = n;
     }
     
+    // 時間を計測
     t1 = gettimeofday_sec();
     if (k == 0)
     {
@@ -184,9 +207,13 @@ int main(int argc, char *argv[])
     }
     else
     {
-        result = calc_parallel(arr1, arr2, ar, ac, bc);
+        result = calc_parallel(arr1, arr2, k, ar, ac, bc);
     }
     t2 = gettimeofday_sec();
     printf("%f\n", t2 - t1);
+
+    // デバッグ用
+    //print_result(ar, bc, result);
+
     return 0;
 }
